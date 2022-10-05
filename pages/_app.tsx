@@ -2,18 +2,17 @@ import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import { ThemeProvider } from 'next-themes'
 import Layout from '../components/layout'
-import { UserProvider } from '@auth0/nextjs-auth0'
+import {SessionProvider } from 'next-auth/react'
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps:{session,...pageProps}}: any) {
   return (
     <ThemeProvider attribute='class' >
-      <UserProvider>
-
-      <Layout>
-
-      <Component {...pageProps} />
-      </Layout>
-      </UserProvider>
+      <SessionProvider session={session}>
+        
+        <Layout>
+        <Component {...pageProps} />
+        </Layout>
+      </SessionProvider>
     </ThemeProvider>
   )
 }
