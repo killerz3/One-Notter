@@ -13,7 +13,7 @@ const Home: NextPage = () => {
   // if(session) router.push("notes")
  return (
    <div className='bg-neutral-100 dark:bg-stone-900 theme-transission h-screen flex flex-col justify-center items-center'>
-     <div className='div-themed m-5'>
+     <div className='div-themed m-5 outline outline-2 outline-stone-500'>
 
        <span className="text-xl font-semibold block">Welcome to One-notter</span>
        <div className='mt-3'>
