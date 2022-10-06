@@ -29,3 +29,12 @@ a {
     background: black;
   }
 }
+
+
+.theme-transission{
+@apply transition ease-in duration-700
+}
+
+.div-themed{
+@apply bg-neutral-100 dark:bg-stone-800 p-4 rounded-md outline outline-2 outline-stone-500 shadow-xl text-neutral-800 dark:text-neutral-300 theme-transission
+}

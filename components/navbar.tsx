@@ -11,8 +11,8 @@ export default function Navbar() {
     const {data:session}=useSession()
 
     return (
-        <div className='bg-neutral-100 dark:bg-stone-900 text-3xl dark:text-neutral-100 text-stone-900  px-5 p-3 flex justify-between items-center'>
-            <Link href={'/'}>One Note</Link>
+        <div className='bg-neutral-100 dark:bg-stone-900 text-3xl dark:text-neutral-100 text-stone-900  px-5 p-3 flex justify-between items-center theme-transission'>
+            <Link href={'/'}>One-Notter</Link>
 
 
 

@@ -12,9 +12,27 @@ const Home: NextPage = () => {
   const router=useRouter()
   // if(session) router.push("notes")
  return (
-    <div className='bg-neutral-100 dark:bg-stone-900 dark  h-screen flex items-center justify-center transition ease-in duration-500'>
-      <div className='bg-stone-700'></div>
-    </div> 
+   <div className='bg-neutral-100 dark:bg-stone-900 theme-transission h-screen flex flex-col justify-center items-center'>
+     <div className='div-themed m-5'>
+
+       <span className="text-xl font-semibold block">Welcome to One-notter</span>
+       <div className='mt-3'>
+         Simple & minimalistic note taking app
+         created with:
+         <ul className='list-disc ml-5'>
+          <li>NextJS</li>
+          <li>TailwindCSS</li>
+          <li>Prisma ORM on a Postgres DB</li>
+          <li>Auth using Next-Auth</li>
+          <li>Powered by TypeScript</li>
+         </ul>
+       </div>
+
+       
+     
+     </div>
+     <button onClick={()=>signIn()} className="text-neutral-800 dark:text-neutral-300 mt-10">Sign In to experience</button>
+   </div>
    
   )
 }
