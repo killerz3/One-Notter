@@ -1,29 +1,41 @@
-import React, { useEffect } from "react";
+import { PrismaClient , Note } from "@prisma/client";
+import React, { useEffect,useState } from "react";
 import { useRouter } from "next/router";
+import Router from "next/router";
 import { getSession, useSession } from "next-auth/react";
 import NoteListItem from "../components/noteListItem";
 import Image from "next/image";
 import axios from "axios"
-
 import {BsPen} from "react-icons/bs"
+import AddNoteModal from "../components/addNoteModal";
 
 
-export default function Notes() {
+export default function Notes({InitialNotes}:any) {
     const { data: session } = useSession();
     const router = useRouter();
 
-    const newNote = async() => {
-        const userId = session?.user?.id;
-        const title = "title";
-        const content = "this is the content of a note"
-        const createdAt = Date.now().toString();
-        
-        await axios.post("/api/notes/addNote", {
-            userId,title,content,createdAt
-        })
-        
+    const [AddNoteModalOpen, setAddNoteModalOpen] = useState(false)
 
+    const handleModalClose = () => {
+        setAddNoteModalOpen(false)
+        router.replace(router.asPath)
     }
+
+    const textCombine = (note: any) => {
+        
+        let finalText=""
+        
+        note.content.blocks.map((block:any) => {
+        finalText+=block.text
+        })
+        return finalText
+    }
+
+    
+
+    
+    
+   
 
     return (
         <div className=" h-screen bg-neutral-300 dark:bg-stone-900 theme-transission flex flex-col justify-center items-center text-neutral-700 dark:text-neutral-300 ">
@@ -46,18 +58,32 @@ export default function Notes() {
                 </div>
 
                 <div className="mt-5 flex items-center justify-between">Here are your notes:
-                    <button className="h-8  md:h-10 flex items-center justify-between p-2 rounded-xl dark:bg-neutral-300 bg-stone-900  text-neutral-300 dark:text-stone-900 text-sm md:text-lg">
+                    <button
+                        onClick={()=>{setAddNoteModalOpen(true)}} 
+                        className="h-8  md:h-10 flex items-center justify-between p-2 rounded-xl dark:bg-neutral-300 bg-stone-900  text-neutral-300 dark:text-stone-900 text-sm md:text-lg">
                         <BsPen className='mr-2' /> New note
                     </button>
                 </div>
             <div className="grid grid-flow-row grid-cols-1 md:grid-cols-2  gap-4">
-                <NoteListItem/>
-                <NoteListItem/>
+                
+                    {
+                        InitialNotes.map(
+                            (note: Note) => {
+                                return <NoteListItem
+                                    key={note.id}
+                                    title={note.title == "" ? "NO Title" : note.title}
+                                    contentText={textCombine(note)} />
+
+
+                            }
+                        )
+                }
      
-             
+                
                 </div>
-                <button onClick={()=>{newNote()}}>this </button>
+                
             </div>
+                {AddNoteModalOpen && <AddNoteModal onClose={handleModalClose} />}
         </div>
     );
 }
@@ -77,7 +103,18 @@ export const getServerSideProps = async (context: any) => {
             },
         };
     }
+    const prisma = new PrismaClient()
+    let notes = await prisma.note.findMany({
+        where: {
+            userId:session.user.id
+        }
+    })
+
+
+
     return {
-        props: {},
+        props: {
+            InitialNotes: notes
+        },
     };
 };
