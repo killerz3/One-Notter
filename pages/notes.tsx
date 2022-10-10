@@ -8,6 +8,7 @@ import Image from "next/image";
 import axios from "axios"
 import {BsPen} from "react-icons/bs"
 import AddNoteModal from "../components/addNoteModal";
+import EditNoteModal from "../components/editNoteModal";
 
 
 export default function Notes({InitialNotes}:any) {
@@ -15,9 +16,12 @@ export default function Notes({InitialNotes}:any) {
     const router = useRouter();
 
     const [AddNoteModalOpen, setAddNoteModalOpen] = useState(false)
+    const [EditNoteModalOpen, setEditNoteModalOpen] = useState(false)
+    const [NoteClicked, setNoteClicked] = useState<any>()
 
     const handleModalClose = () => {
         setAddNoteModalOpen(false)
+        setEditNoteModalOpen(false)
         router.replace(router.asPath)
     }
 
@@ -71,9 +75,18 @@ export default function Notes({InitialNotes}:any) {
                             (note: Note) => {
                                 return <NoteListItem
                                     key={note.id}
-                                    title={note.title == "" ? "NO Title" : note.title}
-                                    contentText={textCombine(note)} />
-
+                                    note={note}
+                                    onClick={
+                                        () => {
+                                            setEditNoteModalOpen(true)
+                                            setNoteClicked({
+                                                id: note.id,
+                                                content: note.content,
+                                                title: note.title,
+                                            })
+                                        }}
+                                />
+                                    
 
                             }
                         )
@@ -83,7 +96,9 @@ export default function Notes({InitialNotes}:any) {
                 </div>
                 
             </div>
-                {AddNoteModalOpen && <AddNoteModal onClose={handleModalClose} />}
+            {AddNoteModalOpen && <AddNoteModal onClose={handleModalClose} />}
+            {EditNoteModalOpen && <EditNoteModal onClose={handleModalClose} noteData={NoteClicked}  />}
+            
         </div>
     );
 }
